@@ -1,2 +1,2 @@
 heroku ps:scale worker=1
-worker: python /player.py
+worker: python discord/player.py
