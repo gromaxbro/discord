@@ -1,35 +1,42 @@
-import discord
+
+import datetime
 import asyncio
-import logging
+import pytz
+import threading
+import time
 import discord
+from discord.ext import commands
+from requests import get
+import json
 
-intents = discord.Intents.default()
-intents.members = True
+bot = commands.Bot(command_prefix='!')
 
-client = discord.Client(intents=intents)
+aware_us_centrald = datetime.datetime.now(pytz.timezone('US/Central'))
 
+async def timer():
+    await bot.wait_until_ready()# replace with channel ID that you want to send to
+    msg_sent = False
+    tyt = aware_us_centrald.hour + 2
+    print(tyt)
+    while True:
+        aware_us_central = datetime.datetime.now(pytz.timezone('US/Central'))
+        # print(aware_us_central.second)
+        if tyt == 24:
+            tyt = 0
+            print(tyt)
+        if aware_us_central.hour == tyt:
+            print("done")
+                content = get("https://meme-api.herokuapp.com/gimme").text
+                data = json.loads(content,)
+                meme = discord.Embed(Color = discord.Color.random()).set_image(url=f"{data['url']}")
+                chee = bot.get_channel(949697019004481616)
+                await chee.send(embed=meme)
+            tyt = aware_us_central.hour + 2
+            print(tyt)
+        else:
+            msg_sent = False
+        await asyncio.sleep(1)
 
-@client.event
-async def on_ready():
-	print("log")
-	
-
-@client.event
-async def on_member_join(member):
-	channel = client.get_channel(id=947834000670588988)
-	roles = client.get_channel(id=947483054962782218)
-	rules = client.get_channel(id=947888817837326447)
-	rty = (f"❤️ welcome  to the three heavenly Kings ⚔️ we are gratefull to you be here 🙇 please go to {roles.mention} to choose your character and see the {rules.mention}")
-	embedVar = discord.Embed(title="welcome legend ⚔️",description=rty, color=0x00ff00)
-	await channel.send(embed=embedVar) 
-
-@client.event
-async def on_member_remove(member):
-	channet = client.get_channel(id=947834161127911444)
-	rty = (f"❤we lost a legent {member.mention}")
-	embedVar = discord.Embed(title="sad news",description=rty, color=0x00ff00)
-	await channel.send(embed=embedVar) 
-
-
-
-client.run("OTQ3ODY5Mzg0OTgwOTg3OTM1.YhziJw.BU8eropZvYG8t58juZNJvrht34w")
+bot.loop.create_task(timer())
+bot.run('OTQ3OTMyNTQwODc3MDEzMDcy.Yh0c-Q.oLE4DY_d6hwt7LD__QwFzmNkMKY')
+    
